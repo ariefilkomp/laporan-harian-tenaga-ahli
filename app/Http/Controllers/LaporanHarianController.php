@@ -260,7 +260,7 @@ class LaporanHarianController extends Controller
             $nomor++;
         }
                     
-        $file = 'HelloWorld.docx';
+        $file = 'laporan-harian-'.$yearMonth.'.docx';
         header("Content-Description: File Transfer");
         header('Content-Disposition: attachment; filename="' . $file . '"');
         header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessing‌​ml.document');
