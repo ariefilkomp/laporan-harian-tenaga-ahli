@@ -55,6 +55,7 @@ class LaporanHarianController extends Controller
     public function delete(Request $request)
     {
         $lh = LaporanHarian::findOrFail($request->id);
+        BuktiLaporan::where('laporan_harian_id', $lh->id)->delete();
         $anchorID = 'date'.str_replace('-', '', $lh->tanggal);
         $lh->delete();
         return Redirect::to(URL::previous() . "#" .$anchorID)->with('message'.$anchorID, 'Data deleted successfully.');
@@ -84,7 +85,13 @@ class LaporanHarianController extends Controller
             'bukti' => $request->bukti->store('public/images/bukti-laporans')
         ]);
         $anchorID = 'date'.str_replace('-', '', $lh->tanggal);
-        $rdr = URL::previous() ."?ym=" .substr($lh->tanggal, 0, 7) ."&rand=".rand(1, 9999) ."#" .$anchorID;
+        $urlPref = URL::previous();
+        if(str_contains($urlPref, '?')) {
+            $rdr = URL::previous() ."&rand=".rand(1, 9999) ."#" .$anchorID;
+        } else {
+            $rdr = URL::previous() ."?ym=" .substr($lh->tanggal, 0, 7) ."&rand=".rand(1, 9999) ."#" .$anchorID;
+        }
+
         return response()->json(['success' => true, 'pesan' => "Data saved successfully.", 'rdr' => $rdr]);
     }
 
