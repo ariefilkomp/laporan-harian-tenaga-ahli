@@ -221,11 +221,15 @@ class LaporanHarianController extends Controller
         $atasan->addText("");
         $atasan->addText("");
         $atasan->addText("");
+        $atasan->addText("");
+        $atasan->addText("");
         $atasan->addText(auth()->user()->nama_pejabat, array('bold' => true, 'underline' => 'single'), $paragraphStyleName);
-        $atasan->addText(auth()->user()->nip_pejabat, null, $paragraphStyleName);
+        $atasan->addText('NIP. '.auth()->user()->nip_pejabat, null, $paragraphStyleName);
         $user = $tableTtd->addCell(4000);
         $user->addText("");
         $user->addText("Yang Melaporkan", null, $paragraphStyleName);
+        $user->addText("");
+        $user->addText("");
         $user->addText("");
         $user->addText("");
         $user->addText("");
@@ -263,6 +267,8 @@ class LaporanHarianController extends Controller
                     $section->addImage($fileContent,['width' => 350, 'alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
                 }
             }
+
+            $section->addText("");
 
             $nomor++;
         }
