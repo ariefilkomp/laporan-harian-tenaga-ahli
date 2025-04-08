@@ -40,15 +40,15 @@
                     <a href="#bukti{{ $ym->format('Ymd') }}" class="text-slate-500 font-medium text-sm px-4 py-2 border border-slate-600 rounded-lg hover:bg-slate-100"> Pdf</a>
                 </div>
                 <div class="mx-8 mt-8 flex">
-                    <h1 class="mx-auto text-3xl font-bold">Laporan Pelaksanaan Pekerjaan</h1>
+                    <h1 class="mx-auto text-3xl font-bold dark:text-white">Laporan Pelaksanaan Pekerjaan</h1>
                 </div>
 
                 <div class="mx-8 flex">
-                    <h1 class="mx-auto text-2xl font-bold">{{ auth()->user()->jabatan }} pada
+                    <h1 class="mx-auto text-2xl font-bold dark:text-white">{{ auth()->user()->jabatan }} pada
                         {{ auth()->user()->nama_dinas }}</h1>
                 </div>
 
-                <div class="mx-8 mb-8 flex">
+                <div class="mx-8 mb-8 flex dark:text-white">
                     <table class="mx-auto text-lg">
                         <tr>
                             <td class="w-24">Nama</td>
@@ -167,7 +167,7 @@
                     </table>
                 </div>
                 <div class="my-12">&nbsp;</div>
-                <div class="flex flex-row ">
+                <div class="flex flex-row dark:text-white">
                     <div class="flex flex-col h-64 w-full text-center justify-center align-middle">
                         <p>
                             Pejabat Pembuat Komitmen
@@ -196,7 +196,7 @@
                 <div class="my-12">&nbsp;</div>
 
                 <div class="flex">
-                    <h2 class="text-xl font-bold text-slate-900 mx-auto">LAMPIRAN</h2>
+                    <h2 class="text-xl font-bold text-slate-900 mx-auto dark:text-white">LAMPIRAN</h2>
                 </div>
 
                 <div class="my-12">&nbsp;</div>
@@ -210,7 +210,7 @@
                             in_array($per->format('Y-m-j'), $liburs))
                         @continue
                     @endif
-                    <div class="flex flex-col mx-8 mt-8">
+                    <div class="flex flex-col mx-8 mt-8 dark:text-white">
                         <p class="text-slate-800 font-semibold">{{ $nomor++ }}.
                             {{ $per->isoFormat('dddd, DD MMMM Y') }}</p>
                         <ul class="pl-6">

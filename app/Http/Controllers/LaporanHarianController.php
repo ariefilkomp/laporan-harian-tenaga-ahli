@@ -11,6 +11,7 @@ use Carbon\CarbonPeriod;
 use App\Models\LaporanHarian;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class LaporanHarianController extends Controller
 {
@@ -39,15 +40,18 @@ class LaporanHarianController extends Controller
         }
 
         //get libur use Illuminate\Support\Facades\Http;
-        $liburs = [];
-        $libur = Http::get('https://dayoffapi.vercel.app/api?month='. $ym->format('m').'&year='. $ym->format('Y'))->json();
-        if(count($libur) > 0)
-        {
-            foreach($libur as $lib)
+        $liburs = Cache::remember('liburs'.date('Ymd'), 86400, function () use ($ym) {
+            $libur = Http::get('https://dayoffapi.vercel.app/api?month='. $ym->format('m').'&year='. $ym->format('Y'))->json();
+            $liburs = [];
+            if(count($libur) > 0)
             {
-                $liburs[] = $lib['tanggal'];
+                foreach($libur as $lib)
+                {
+                    $liburs[] = $lib['tanggal'];
+                }
             }
-        }
+            return $liburs;
+        });
 
         return view('lh.index', compact('yearMonth', 'laporanHarian', 'period', 'ym', 'laporans', 'liburs', 'yearMonth'));
     }
@@ -129,21 +133,26 @@ class LaporanHarianController extends Controller
         }
 
         //get libur use Illuminate\Support\Facades\Http;
-        $liburs = [];
-        $libur = Http::get('https://dayoffapi.vercel.app/api?month='. $ym->format('m').'&year='. $ym->format('Y'))->json();
-        if(count($libur) > 0)
-        {
-            foreach($libur as $lib)
+        $liburs = Cache::remember('liburs'.date('Ymd'), 86400, function () use ($ym) {
+            $libur = Http::get('https://dayoffapi.vercel.app/api?month='. $ym->format('m').'&year='. $ym->format('Y'))->json();
+            $liburs = [];
+            if(count($libur) > 0)
             {
-                $liburs[] = $lib['tanggal'];
+                foreach($libur as $lib)
+                {
+                    $liburs[] = $lib['tanggal'];
+                }
             }
-        }
+            return $liburs;
+        });
         
         $phpWord = new \PhpOffice\PhpWord\PhpWord();
         $section = $phpWord->addSection();
 
         $paragraphStyleName = 'pStyle';
+        $paragraphStyleNameLeft = 'pStyleLeft';
         $phpWord->addParagraphStyle($paragraphStyleName, ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::CENTER]);
+        $phpWord->addParagraphStyle($paragraphStyleNameLeft, ['alignment' => \PhpOffice\PhpWord\SimpleType\Jc::START]);
 
         $section->addText(
             'Laporan Pelaksanaan Pekerjaan',
@@ -215,26 +224,26 @@ class LaporanHarianController extends Controller
         $atasan = $tableTtd->addCell(4000);
         $tableTtd->addCell(1000);
         
-        $atasan->addText("Pejabat Pembuat Komitmen", null, $paragraphStyleName);
-        $atasan->addText(auth()->user()->nama_dinas, null, $paragraphStyleName);
+        $atasan->addText("Pejabat Pembuat Komitmen", null, $paragraphStyleNameLeft);
+        $atasan->addText(auth()->user()->nama_dinas, null, $paragraphStyleNameLeft);
         $atasan->addText("");
         $atasan->addText("");
         $atasan->addText("");
         $atasan->addText("");
         $atasan->addText("");
         $atasan->addText("");
-        $atasan->addText(auth()->user()->nama_pejabat, array('bold' => true, 'underline' => 'single'), $paragraphStyleName);
-        $atasan->addText('NIP. '.auth()->user()->nip_pejabat, null, $paragraphStyleName);
-        $user = $tableTtd->addCell(4000);
+        $atasan->addText(auth()->user()->nama_pejabat, array('bold' => true, 'underline' => 'single'), $paragraphStyleNameLeft);
+        $atasan->addText('NIP. '.auth()->user()->nip_pejabat, null, $paragraphStyleNameLeft);
+        $user = $tableTtd->addCell(4000, array('align' => 'left'));
         $user->addText("");
-        $user->addText("Yang Melaporkan", null, $paragraphStyleName);
-        $user->addText("");
-        $user->addText("");
+        $user->addText("Yang Melaporkan", null, $paragraphStyleNameLeft);
         $user->addText("");
         $user->addText("");
         $user->addText("");
         $user->addText("");
-        $user->addText(auth()->user()->name, array('bold' => true, 'underline' => 'single'), $paragraphStyleName);
+        $user->addText("");
+        $user->addText("");
+        $user->addText(auth()->user()->name, array('bold' => true, 'underline' => 'single'), $paragraphStyleNameLeft);
 
         $section->addText("");
         $section->addText("");

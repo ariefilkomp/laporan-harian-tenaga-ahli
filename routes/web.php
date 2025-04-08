@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
-Route::get('/stor', function () {
-    echo storage_path('public/images/bukti-laporans/UmwVOmeoom4XBOEmL3B5ZKkgTxRcpGjEcICNc5Im.png');
-});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
